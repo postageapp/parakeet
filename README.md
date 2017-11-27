@@ -33,11 +33,17 @@ Redis can also be referenced to pull down additional configuration details.
 Included with the library is a launcher utility that can be used to build
 small, simple background processes.
 
+A very minimal worker process looks like:
+
     require 'parakeet'
 
-    Parakeet.launch do
+    Parakeet.run do
       # Application code goes here.
     end
+
+It's necessary to have some kind of event-loop running if this process is to
+be persistent otherwise that block will terminate prematurely and the process
+will restart automatically on the presumption that something crashed.
 
 ### Logging
 
