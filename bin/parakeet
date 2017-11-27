@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+# == Imports ================================================================
+
+require 'optparse'
+
+# FIX: Handle symlinked binaries
+$LOAD_PATH << File.expand_path('../lib', File.dirname(__FILE__))
+
+# == Main ===================================================================
+
+options = {
+  config: nil
+}
+
+program = OptionParser.new do |opts|
+  opts.on('-f', '--config PATH', 'Path to configuration file') do |path|
+    options[:config] = path
+  end
+end

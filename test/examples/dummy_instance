@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.expand_path('../../lib/', File.dirname(__FILE__))
+
+require 'parakeet'
+
+Parakeet::Instance.options do |program, options|
+  program.on('-e', '--env ENV', 'Set the run-time environment') do |e|
+    options.env = e
+  end
+  program.on('-w', '--wait SECONDS', 'Wait for a given number of seconds before exiting') do |s|
+    options.wait = s.to_i
+  end
+end.run do |options|
+  Thread.new do
+    sleep(options[:wait])
+  end.join
+end
