@@ -7,6 +7,8 @@ require 'optparse'
 # FIX: Handle symlinked binaries
 $LOAD_PATH << File.expand_path('../lib', File.dirname(__FILE__))
 
+require 'parakeet'
+
 # == Main ===================================================================
 
 options = {
@@ -14,7 +16,35 @@ options = {
 }
 
 program = OptionParser.new do |opts|
+  opts.banner = 'Usage: parakeet [options] status|list|start|stop|test'
   opts.on('-f', '--config PATH', 'Path to configuration file') do |path|
     options[:config] = path
   end
+end
+
+args = program.parse(ARGV)
+
+config = Parakeet::Config.new(options[:config])
+
+case (command = args.shift)
+when 'list', 'status'
+  config.instances.each do |key, instance_config|
+    puts key
+  end
+when 'start'
+  config.instances.each do |key, instance_config|
+    if (bin = instance_config.bin)
+      pid = fork do
+        exec(bin)
+      end
+
+      p pid
+    end
+  end
+when 'stop'
+  config.instances.each do |key, instance_config|
+  end
+when nil
+  puts program
+  exit(-1)
 end

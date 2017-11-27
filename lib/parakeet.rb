@@ -4,7 +4,7 @@ module Parakeet
   # == Module Methods =======================================================
 
   def self.config(path = nil)
-    Parakeet::Config.new(path)
+    Parakeet::Config.import(path)
   end
 end
 
