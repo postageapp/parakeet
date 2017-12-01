@@ -4,9 +4,9 @@ class Parakeet::Config
   # == Constants ============================================================
 
   PATH_DEFAULTS = %w[
-    ../../config/parakeet.yml
-    ~/config/parakeet.yml
     ~/.parakeet.yml
+    ~/config/parakeet.yml
+    ../../config/parakeet.yml
   ].freeze
 
   # == Properties ===========================================================
@@ -40,11 +40,19 @@ class Parakeet::Config
     end
   end
 
+  def self.import(path)
+    if (path and File.exist?(path))
+      YAML.load(File.open(path)).map do |instance, instance_config|
+        [ instance, convert(instance_config) ]
+      end.to_h
+    else
+      { }
+    end
+  end
+
   # == Instance Methods =====================================================
 
   def initialize(path = nil)
-    @instances = YAML.load(File.open(path || path_found)).map do |instance, instance_config|
-      [ instance, self.class.convert(instance_config) ]
-    end.to_h
+    @instances = self.class.import(path || self.class.path_found)
   end
 end
