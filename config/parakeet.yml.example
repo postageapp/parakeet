@@ -1,2 +1,3 @@
-test:
-  bin: test/examples/null
+instances:
+  test:
+    bin: test/examples/null

@@ -40,11 +40,11 @@ class Parakeet::Config
     end
   end
 
-  def self.import(path)
+  def self.import(path, defaults = nil)
     if (path and File.exist?(path))
-      YAML.load(File.open(path)).map do |instance, instance_config|
-        [ instance, convert(instance_config) ]
-      end.to_h
+      self.class.convert(
+        YAML.load(File.open(path))
+      )
     else
       { }
     end
@@ -53,6 +53,8 @@ class Parakeet::Config
   # == Instance Methods =====================================================
 
   def initialize(path = nil)
-    @instances = self.class.import(path || self.class.path_found)
+    config = self.class.import(path || self.class.path_found)
+
+    @instances = config.instances.to_h
   end
 end

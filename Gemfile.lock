@@ -50,6 +50,7 @@ GEM
     semver2 (3.4.2)
     test-unit (3.2.6)
       power_assert
+    test_plus (0.1.1)
     thread_safe (0.3.6)
 
 PLATFORMS
@@ -59,6 +60,7 @@ DEPENDENCIES
   bundler
   jeweler
   test-unit
+  test_plus
 
 BUNDLED WITH
    1.16.0

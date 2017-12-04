@@ -2,7 +2,7 @@ require 'rubygems'
 require 'bundler'
 
 begin
-  Bundler.setup(:default, :development)
+  Bundler.setup(:default, :development, :test)
 
 rescue Bundler::BundlerError => e
   $stderr.puts e.message
@@ -11,10 +11,12 @@ rescue Bundler::BundlerError => e
 end
 
 require 'test/unit'
+require 'test_plus'
 
 $LOAD_PATH << File.expand_path('../lib', File.dirname(__FILE__))
 
 require 'parakeet'
 
 class Test::Unit::TestCase
+  include TestPlus::Extensions
 end

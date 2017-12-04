@@ -1,6 +1,7 @@
-dummy1:
-  bin: test/examples/dummy_instance
-dummy2:
-  bin: test/examples/dummy_instance
-dummy3:
-  bin: test/examples/dummy_instance
+instances:
+  dummy1:
+    bin: test/examples/dummy_instance
+  dummy2:
+    bin: test/examples/dummy_instance
+  dummy3:
+    bin: test/examples/dummy_instance
