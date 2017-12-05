@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-class ParakeetTest < Test::Unit::TestCase
+class ParakeetSupportTest < Test::Unit::TestCase
   def test_symbolize_keys_on_miscellaneous
     assert_mapping(
       true => true,

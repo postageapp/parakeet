@@ -19,4 +19,11 @@ require 'parakeet'
 
 class Test::Unit::TestCase
   include TestPlus::Extensions
+
+  def example_path(name)
+    File.expand_path(
+      name,
+      File.expand_path('./examples/', File.dirname(__FILE__))
+    )
+  end
 end
