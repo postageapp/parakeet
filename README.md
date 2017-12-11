@@ -37,7 +37,7 @@ A very minimal worker process looks like:
 
     require 'parakeet'
 
-    Parakeet.run do
+    Parakeet.main do
       # Application code goes here.
     end
 

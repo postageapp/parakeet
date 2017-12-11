@@ -1,24 +1,77 @@
+require 'birling'
+
 class Parakeet::Instance
   # == Constants ============================================================
   
   # == Properties ===========================================================
 
   # == Class Methods ========================================================
-
-  def self.options(&block)
-    new(Parakeet::OptionParser.new(&block).options)
-  end
   
   # == Instance Methods =====================================================
 
-  def initialize(options = nil)
-    @options = options || { }
+  def initialize
   end
 
-  def run(options = nil)
-    yield(options || @options) if (block_given?)
+  def program_name
+    File.basename($0)
+  end
+
+  def options(&block)
+    @parser = Parakeet::OptionParser.new(program_name: self.program_name, &block)
+  end
+
+  def main(&block)
+    @exec = block
+  end
+
+  def call
+    @exec.call(@parser.options)
 
   rescue Interrupt
     # Ignore, expected.
+  end
+
+  def logger
+    @logger ||= Birling.open(@parser.options.log_path)
+  end
+
+  def parse!(argv)
+    @parser.parse(argv)
+
+    case (@parser.args.first)
+    when 'run'
+      self.call
+    when 'start'
+      daemonized do |daemon|
+        daemon.start!(self.logger) do |pid|
+          yield(:start, pid) if (block_given?)
+        end
+      end
+    when 'stop'
+      daemonized do |daemon|
+        daemon.stop! do |pid|
+          yield(:stop, pid) if (block_given?)
+        end
+      end
+    when 'restart'
+      daemonized do |daemon|
+        daemon.restart! do |pid, old_pid|
+          yield(:restart, pid, old_pid) if (block_given?)
+        end
+      end
+    when 'status'
+      daemonized do |daemon|
+        daemon.status do |pid|
+          yield(:status, pid) if (block_given?)
+        end
+      end
+    else
+      puts @parser.to_s
+    end
+  end
+
+protected
+  def daemonized(&block)
+    Parakeet::Daemonizer.new(self, pid_path: @parser.options.pid_path, &block)
   end
 end

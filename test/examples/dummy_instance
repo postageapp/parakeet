@@ -4,7 +4,9 @@ $LOAD_PATH << File.expand_path('../../lib/', File.dirname(__FILE__))
 
 require 'parakeet'
 
-Parakeet::Instance.options do |program, options|
+instance = Parakeet::Instance.new
+
+instance.options do |program, options|
   options.wait = 5
 
   program.on('-e', '--env ENV', 'Set the run-time environment') do |e|
@@ -13,8 +15,32 @@ Parakeet::Instance.options do |program, options|
   program.on('-w', '--wait SECONDS', 'Wait for a given number of seconds before exiting') do |s|
     options.wait = s.to_i
   end
-end.run do |options|
+
+  options.pid_path = File.expand_path('../../tmp/dummy_instance.pid', File.dirname(__FILE__))
+  options.log_path = File.expand_path('../../tmp/dummy_instance.log', File.dirname(__FILE__))
+end
+
+instance.main do |options|
   Thread.new do
     sleep(options[:wait])
   end.join
+end
+
+instance.parse!(ARGV) do |action, pid, old_pid|
+  case (action)
+  when :start
+    puts '%s started (%d)' % [ instance.program_name, pid ]
+  when :stop
+    puts '%s stopped (%d)' % [ instance.program_name, pid ]
+  when :restart
+    puts '%s restarted (%d -> %d)' % [ instance.program_name, old_pid, pid ]
+  when :status
+    if (pid)
+      puts '%s started (%d)' % [ instance.program_name, pid ]
+    else
+      puts '%s not running' % [ instance.program_name ]
+    end
+  when :run
+    # 
+  end
 end
