@@ -1,8 +1,14 @@
 #!/usr/bin/env ruby
 
+# == Imports ================================================================
+
+require 'bundler/setup'
+
 $LOAD_PATH << File.expand_path('../../lib/', File.dirname(__FILE__))
 
 require 'parakeet'
+
+# == Main ===================================================================
 
 instance = Parakeet::Instance.new
 
@@ -23,6 +29,8 @@ end
 instance.main do |options|
   Thread.new do
     sleep(options[:wait])
+
+    puts "Operation completed."
   end.join
 end
 
@@ -41,6 +49,6 @@ instance.parse!(ARGV) do |action, pid, old_pid|
       puts '%s not running' % [ instance.program_name ]
     end
   when :run
-    # 
+    # No particular output
   end
 end

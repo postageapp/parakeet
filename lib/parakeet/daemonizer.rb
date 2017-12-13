@@ -47,14 +47,19 @@ class Parakeet::Daemonizer
 
     (_pid and Process.kill(0, _pid)) ? _pid : nil
 
-  rescue Errno::ESRCH
+  rescue Errno::ESRCH => e
     nil
   end
 
   def start!(logger = nil)
-    pid = daemonize(logger) do
-      @instance.call
-    end
+    pid =
+      if (running?)
+        self.running_pid
+      else
+        daemonize(logger) do
+          @instance.call
+        end
+      end
 
     self.pid = pid
 
@@ -105,14 +110,20 @@ class Parakeet::Daemonizer
 
 protected
   def daemonize(logger = nil)
-    delay = 10
+    # Set up a pipe so that the intermediate process can send back a PID
     rfd, wfd = IO.pipe
+    delay = 10
     
     forked_pid = fork do
       rfd.close
 
       supervisor_pid = fork do
         relaunch = true
+
+        if (logger)
+          $stdout = logger
+          $stderr = logger
+        end
         
         while (relaunch)
           daemon_pid = fork do
@@ -185,6 +196,15 @@ protected
       wfd.flush
       wfd.close
     end
+
+    # Wait for the intermediate process to finish
+    Process.wait2(forked_pid)
+
+    # Pullout the PID data
+    rfd.readline.to_i
+
+  ensure
+    rfd.close
   end
 
   def nap(time)

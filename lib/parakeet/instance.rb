@@ -43,8 +43,12 @@ class Parakeet::Instance
       self.call
     when 'start'
       daemonized do |daemon|
-        daemon.start!(self.logger) do |pid|
+        if (pid = daemon.running_pid)
           yield(:start, pid) if (block_given?)
+        else
+          daemon.start!(self.logger) do |pid|
+            yield(:start, pid) if (block_given?)
+          end
         end
       end
     when 'stop'
@@ -73,5 +77,13 @@ class Parakeet::Instance
 protected
   def daemonized(&block)
     Parakeet::Daemonizer.new(self, pid_path: @parser.options.pid_path, &block)
+  end
+
+  def redirect_stdout!
+    $stdout = self.logger
+  end
+
+  def redirect_stderr!
+    $stderr = self.logger
   end
 end
