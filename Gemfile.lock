@@ -1,8 +1,13 @@
+GIT
+  remote: git@github.com:postageapp/birling.git
+  revision: e9257856b9c4b3c7e981e8e62fd4f09bd8482637
+  specs:
+    birling (0.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.4.0)
-    birling (0.1.3)
     builder (3.2.3)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -47,9 +52,9 @@ GEM
     psych (2.2.4)
     rack (2.0.3)
     rake (12.3.0)
-    rdoc (5.1.0)
+    rdoc (6.0.0)
     semver2 (3.4.2)
-    test-unit (3.2.6)
+    test-unit (3.2.7)
       power_assert
     test_plus (0.1.1)
     thread_safe (0.3.6)
@@ -58,7 +63,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  birling
+  birling!
   bundler
   jeweler
   test-unit
