@@ -10,6 +10,7 @@ class Parakeet::Instance
   # == Instance Methods =====================================================
 
   def initialize
+    yield(self) if (block_given?)
   end
 
   def program_name
@@ -18,10 +19,14 @@ class Parakeet::Instance
 
   def options(&block)
     @parser = Parakeet::OptionParser.new(program_name: self.program_name, &block)
+
+    self
   end
 
   def main(&block)
     @exec = block
+
+    self
   end
 
   def call
@@ -72,6 +77,8 @@ class Parakeet::Instance
     else
       puts @parser.to_s
     end
+
+    self
   end
 
 protected
