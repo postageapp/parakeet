@@ -17,8 +17,12 @@ class Parakeet::Instance
     File.basename($0)
   end
 
+  def parser(&block)
+    @parser ||= Parakeet::OptionParser.new(program_name: self.program_name, &block)
+  end
+
   def options(&block)
-    @parser = Parakeet::OptionParser.new(program_name: self.program_name, &block)
+    self.parser(&block)
 
     self
   end
@@ -41,9 +45,9 @@ class Parakeet::Instance
   end
 
   def parse!(argv)
-    @parser.parse(argv)
+    self.parser.parse(argv)
 
-    case (@parser.args.first)
+    case (parser.args.first)
     when 'run'
       self.call
     when 'start'
@@ -75,7 +79,7 @@ class Parakeet::Instance
         end
       end
     else
-      puts @parser.to_s
+      puts self.parser.to_s
     end
 
     self
