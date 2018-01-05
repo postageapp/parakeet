@@ -110,8 +110,6 @@ class Parakeet::Daemonizer
 
 protected
   def daemonize(logger = nil)
-    p logger
-    p logger.respond_to?(:write)
     # Set up a pipe so that the intermediate process can send back a PID
     rfd, wfd = IO.pipe
     delay = 10

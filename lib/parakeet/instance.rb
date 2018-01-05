@@ -63,7 +63,7 @@ class Parakeet::Instance
     when 'start'
       daemonized do |daemon|
         if (pid = daemon.running_pid)
-          yield(:start, pid) if (block_given?)
+          yield(:start, pid, pid) if (block_given?)
         else
           daemon.start!(self.logger) do |pid|
             yield(:start, pid) if (block_given?)
