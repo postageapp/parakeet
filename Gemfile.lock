@@ -63,7 +63,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  birling!
+  birling (>= 0.2.0)!
   bundler
   jeweler
   test-unit

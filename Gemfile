@@ -1,6 +1,6 @@
 source  'https://rubygems.org/'
 
-gem 'birling',
+gem 'birling', '>= 0.2.0',
   git: 'git@github.com:postageapp/birling.git'
 
 group :development do

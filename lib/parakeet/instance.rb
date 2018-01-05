@@ -27,6 +27,12 @@ class Parakeet::Instance
     self
   end
 
+  def then
+    (@then ||= [ ]) << Proc.new
+
+    self
+  end
+
   def main(&block)
     @exec = block
 
@@ -46,6 +52,10 @@ class Parakeet::Instance
 
   def parse!(argv)
     self.parser.parse(argv)
+
+    @then and @then.each do |proc|
+      proc.call(@parser.options)
+    end
 
     case (parser.args.first)
     when 'run'
