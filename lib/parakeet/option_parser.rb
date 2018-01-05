@@ -27,7 +27,7 @@ class Parakeet::OptionParser
         @options.config = path
       end
       opts.on('-p', '--pid-file PATH', 'Path to PID file') do |path|
-        @options.pid_file = path
+        @options.pid_path = path
       end
     end
 
