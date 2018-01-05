@@ -65,9 +65,6 @@ class Parakeet::Instance
         if (pid = daemon.running_pid)
           yield(:start, pid, pid) if (block_given?)
         else
-          self.redirect_stdout!
-          self.redirect_stderr!
-          
           daemon.start!(self.logger) do |pid|
             yield(:start, pid) if (block_given?)
           end
