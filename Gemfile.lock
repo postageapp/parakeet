@@ -1,8 +1,8 @@
 GIT
   remote: git@github.com:postageapp/birling.git
-  revision: e9257856b9c4b3c7e981e8e62fd4f09bd8482637
+  revision: 7720600a95c65a6cf8e4e7cb60648eacd862ecde
   specs:
-    birling (0.2.0)
+    birling (0.2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -21,7 +21,7 @@ GEM
       hashie (>= 3.4)
       mime-types (>= 1.16, < 3.0)
       oauth2 (~> 1.0)
-    hashie (3.5.6)
+    hashie (3.5.7)
     highline (1.7.10)
     jeweler (2.3.7)
       builder
@@ -52,7 +52,7 @@ GEM
     psych (2.2.4)
     rack (2.0.3)
     rake (12.3.0)
-    rdoc (6.0.0)
+    rdoc (6.0.1)
     semver2 (3.4.2)
     test-unit (3.2.7)
       power_assert
