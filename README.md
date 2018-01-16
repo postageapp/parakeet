@@ -33,7 +33,7 @@ the PID file used to track status are defined:
 
     require 'parakeet'
 
-    Parakeet::Instance.new.options do |options|
+    Parakeet::Instance.new.options do |program, options|
       options.pid_path = 'example.pid'
       options.log_path = 'example.log'
     end.main do
