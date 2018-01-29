@@ -11,6 +11,8 @@ class Parakeet::Instance
 
   def initialize
     yield(self) if (block_given?)
+
+    @daemonized = false
   end
 
   def program_name
@@ -40,7 +42,7 @@ class Parakeet::Instance
   end
 
   def call
-    @exec.call(@parser.options)
+    @exec.call(@parser.options, @daemonized)
 
   rescue Interrupt
     # Ignore, expected.
@@ -61,6 +63,8 @@ class Parakeet::Instance
     when 'run'
       self.call
     when 'start'
+      @daemonized = true
+      
       daemonized do |daemon|
         if (pid = daemon.running_pid)
           yield(:start, pid, pid) if (block_given?)
@@ -97,7 +101,11 @@ class Parakeet::Instance
 
 protected
   def daemonized(&block)
-    Parakeet::Daemonizer.new(self, pid_path: @parser.options.pid_path, &block)
+    Parakeet::Daemonizer.new(
+      self,
+      pid_path: @parser.options.pid_path,
+      &block
+    )
   end
 
   def redirect_stdout!
