@@ -157,36 +157,41 @@ protected
           begin
             interrupted = false
 
-            Signal.trap('TERM') do
-              interrupted = true
-              Process.kill('TERM', daemon_pid)
+            %w[ INT TERM ].each do |signal|
+              Signal.trap(signal) do
+                interrupted = true
+                logger and logger.info("Supervisor #{Process.pid} received SIG#{signal}, relaunching suspended.")
+                Process.kill(signal, daemon_pid)
 
-              relaunch = false
+                relaunch = false
+              end
             end
 
             _, status = Process.wait2(daemon_pid)
 
             if (interrupted)
-              logger and logger.info("Supervisor #{Process.pid} received termination signal, shut down child #{daemon_pid}.")
+              logger and logger.info("Supervisor #{Process.pid} shut down child #{daemon_pid}.")
             end
 
             # A non-zero exit status indicates some sort of error, so the
             # process will be relaunched after a short delay.
-            relaunch = (status != 0)
+            relaunch &&= (status != 0)
 
           ensure
             # Reset Signal handler before forking again
-            Signal.trap('TERM') do
+            %w[ INT TERM ].each do |signal|
+              Signal.trap(signal) do
+              end
             end
           end
           
           if (relaunch)
             begin
-              logger and logger.info("Supervisor #{Process.pid} will relaunch in %d seconds" % delay)
+              logger and logger.info("Supervisor #{Process.pid} will relaunch in %d second(s)." % delay)
               sleep(delay)
 
             rescue Interrupt
-              logger and logger.info("Supervisor #{Process.pid} abandoing restart because of termination")
+              logger and logger.info("Supervisor #{Process.pid} abandoning restart because of termination.")
 
               relaunch = false
             end
