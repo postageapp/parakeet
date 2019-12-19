@@ -73,7 +73,7 @@ class Parakeet::Daemonizer
     
     if (pid)
       begin
-        Process.kill('INT', pid)
+        Process.kill('TERM', pid)
         
       rescue Errno::ESRCH
         # No such process exception
@@ -88,7 +88,11 @@ class Parakeet::Daemonizer
         # No such process, already terminated
       end
 
-      File.unlink(@pid_path)
+      begin
+        File.unlink(@pid_path)
+      rescue Errno::ENOENT
+        # File already removed, ignore
+      end
     end
 
     yield(pid) if (block_given?)
@@ -153,9 +157,9 @@ protected
           begin
             interrupted = false
 
-            Signal.trap('INT') do
+            Signal.trap('TERM') do
               interrupted = true
-              Process.kill('INT', daemon_pid)
+              Process.kill('TERM', daemon_pid)
 
               relaunch = false
             end
@@ -172,7 +176,7 @@ protected
 
           ensure
             # Reset Signal handler before forking again
-            Signal.trap('INT') do
+            Signal.trap('TERM') do
             end
           end
           
