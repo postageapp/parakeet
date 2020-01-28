@@ -119,6 +119,8 @@ protected
     delay = 10
     
     forked_pid = fork do
+      Process.setsid
+
       rfd.close
 
       supervisor_pid = fork do
