@@ -1,7 +1,6 @@
 source  'https://rubygems.org/'
 
-gem 'birling', '>= 0.2.0',
-  git: 'git@github.com:postageapp/birling.git'
+gem 'birling', '>= 0.2.0'
 
 group :development do
   gem 'bundler'

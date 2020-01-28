@@ -1,13 +1,8 @@
-GIT
-  remote: git@github.com:postageapp/birling.git
-  revision: c24b9fb15c84d308de55a2d584c6c177e77288c0
-  specs:
-    birling (0.2.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.4.0)
+    birling (0.2.2)
     builder (3.2.4)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -63,7 +58,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  birling (>= 0.2.0)!
+  birling (>= 0.2.0)
   bundler
   jeweler
   test-unit
