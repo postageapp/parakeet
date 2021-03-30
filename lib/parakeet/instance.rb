@@ -30,9 +30,7 @@ class Parakeet::Instance
   end
 
   def then(&block)
-    if (block)
-      (@then ||= [ ]) << block
-    end
+    (@then ||= [ ]) << block
 
     self
   end
