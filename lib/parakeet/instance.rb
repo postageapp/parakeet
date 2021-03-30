@@ -2,11 +2,11 @@ require 'birling'
 
 class Parakeet::Instance
   # == Constants ============================================================
-  
+
   # == Properties ===========================================================
 
   # == Class Methods ========================================================
-  
+
   # == Instance Methods =====================================================
 
   def initialize
@@ -29,8 +29,8 @@ class Parakeet::Instance
     self
   end
 
-  def then
-    (@then ||= [ ]) << Proc.new
+  def then(&block)
+    (@then ||= [ ]) << block
 
     self
   end
@@ -64,7 +64,7 @@ class Parakeet::Instance
       self.call
     when 'start'
       @daemonized = true
-      
+
       daemonized do |daemon|
         if (pid = daemon.running_pid)
           yield(:start, pid, pid) if (block_given?)
